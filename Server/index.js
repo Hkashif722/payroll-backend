@@ -139,6 +139,9 @@ app.get("/employee", (req, res) => {
 
 app.post("/employee", (req, res) => {
   const data = req.body;
+
+  console.log(data);
+
   db.query(
     "INSERT INTO emp_details(emp_id,emp_name,emp_dob,emp_doj,emp_pincode,emp_city,emp_mobile_no,emp_state,emp_mail_id) VALUES(?,?,?,?,?,?,?,?,?)",
     [
@@ -155,6 +158,97 @@ app.post("/employee", (req, res) => {
   );
 
   res.send(req.body);
+});
+
+app.get("/department", (req, res) => {
+  db.query("SELECT * FROM dept", (err, result) => {
+    if (result) {
+      // console.log(result);
+      res.send(result);
+    } else console.log(err);
+  });
+});
+
+app.get("/grade", (req, res) => {
+  db.query("SELECT * FROM grade", (err, result) => {
+    if (result) {
+      res.send(result);
+    } else {
+      console.log(err);
+    }
+  });
+});
+
+app.get("/empgrade", (req, res) => {
+  db.query("SELECT * FROM emp_grade", (err, result) => {
+    if (result) {
+      res.send(result);
+    } else console.log(err);
+  });
+});
+
+app.post("/department", (req, res) => {
+  const data = req.body;
+  db.query("INSERT INTO dept(dept_id,dept_name) VALUES(?,?)", [
+    data.dept_id,
+    data.dept_name,
+  ]);
+
+  res.send(data);
+});
+
+app.post("/deldepartment", (req, res) => {
+  const data = req.body;
+  console.log(data);
+  db.query(`DELETE FROM dept WHERE dept_id = ${data.dept_id}`);
+  res.send(data);
+});
+app.post("/grade", (req, res) => {
+  const data = req.body;
+  console.log(data);
+  db.query(
+    "INSERT INTO grade(grade_id,grade_name,grade_basic_salary,grade_bonus) VALUES(?,?,?,?)",
+    [data.grade_id, data.grade_name, data.grade_basic_salary, data.grade_bonus]
+  );
+  res.send(data);
+});
+app.post("/empgrade", (req, res) => {
+  const data = req.body;
+  console.log(data);
+  db.query(
+    "INSERT INTO emp_grade (transaction_id,emp_id,emp_dept_id,emp_grade_id,emp_from_date,emp_to_date) VALUES(?,?,?,?,?,?,)",
+    [
+      data.transaction_id,
+      data.emp_id,
+      data.emp_dept_id,
+      data.emp_grade_id,
+      data.emp_from_date,
+      data.emp_to_date,
+    ]
+  );
+  res.send(data);
+});
+
+app.post("/emp-report", (req, res) => {
+  const id = req.body.emp_id;
+  console.log(id);
+  db.query(`SELECT * FROM emp_salary WHERE emp_id = ${id}`, (err, result) => {
+    if (result) {
+      res.send(result);
+    } else {
+      console.log(err);
+    }
+  });
+});
+
+app.get("/emp-report", (req, res) => {
+  db.query(`SELECT * FROM emp_salary`, (err, result) => {
+    if (result) {
+      res.send(result);
+    } else {
+      console.log(err);
+    }
+  });
 });
 
 app.listen(4000, "localhost", () => {

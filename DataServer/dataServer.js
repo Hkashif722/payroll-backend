@@ -22,12 +22,37 @@ const resolvers = {
       return books;
     },
     employee: (_, __, { dataSources }) => dataSources.payroll.getAllEmployee(),
+    department: (_, __, { dataSources }) =>
+      dataSources.payroll.getAllDepartment(),
+    grade: (_, __, { dataSources }) => dataSources.payroll.AllGrade(),
+    employee_Grade: (_, __, { dataSources }) =>
+      dataSources.payroll.AllEmpGrade(),
   },
   Mutation: {
     addEmployee: async (_, payload, { dataSources }) => {
       const employee = await dataSources.payroll.createEmployee(payload);
-
+      // console.log(employee);
       return employee;
+    },
+    addDepartment: async (_, payload, { dataSources }) => {
+      const department = await dataSources.payroll.addDepartment(payload);
+      console.log("DD");
+      // console.log(department);
+      return department;
+    },
+    deleteDepartment: async (_, payload, { dataSources }) => {
+      console.log(payload);
+      const delDepartment = await dataSources.payroll.delDepartment(payload);
+      // console.log(delDepartment);
+      return delDepartment;
+    },
+    addGrade: async (_, payload, { dataSources }) => {
+      const addGrade = await dataSources.payroll.addGrade(payload);
+      return addGrade;
+    },
+    addEmpGrade: async (_, payload, { dataSources }) => {
+      const addEmpGrade = await dataSources.payroll.addEmpGrade(payload);
+      return addEmpGrade;
     },
   },
 };
